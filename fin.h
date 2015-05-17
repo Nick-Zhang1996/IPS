@@ -43,7 +43,8 @@ int fin_new(char* filename);
 
 //close a fingerprint file
 int fin_end();
-
+//load a fingerprint file
+int fin_load(char* path){
 //add one entry to the file
 int fin_app(struct fin_entry* this_entry);
 int fin_flush();

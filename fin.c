@@ -51,6 +51,20 @@ int fin_app(struct fin_entry* this_entry){
 	}
 }	
 
+//load a fingerprint file for read,return fd on success
+int fin_load(char* path){
+	fin_fd=open(path,O_RDONLY);
+	if(fin_fd==-1){
+		perror("read fin file");
+		return -1;
+		//exit -1;
+	}
+	struct fin_header header;
+	read(fin_fd,&header,sizeof(struct fin_header));
+	entry_count=header.entry_count;
+	return 0;
+}
+
 //flush
 int fin_flush(){
 	int rval=fsync(fin_fd);

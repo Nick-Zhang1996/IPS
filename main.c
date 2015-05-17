@@ -3,7 +3,20 @@
 #include "fin.h"
 #include <errno.h>
 #include <stdlib.h>
+#include <signal.h>
+uint8_t flag_exit=0;
+void ctrl_c(int num){
+	//print statistic results
+	struct pcap_stat stat;
+	pcap_stats(getter_handle,&stat);
+	printf("received %d packages\n",stat.ps_recv);
+	printf("%d dropped for lack of buffer space\n",stat.ps_drop);
+	printf("%d dropped by network interface or driver\n",stat.ps_ifdrop);
+	pcap_breakloop();
+	flag_exit=1;
+	return;
 
+}
 //delay time milliseconds
 void delay(const long time){
 	struct timespec delaytime;
@@ -74,6 +87,11 @@ int main(int argc,char** argv){
 	return 0;
 	*/
 	create_test();
+	while(1){
+		if(flag_exit){
+			return;
+		}
+	}
 	return 0;
 
 }
